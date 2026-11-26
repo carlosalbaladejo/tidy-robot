@@ -118,3 +118,14 @@ h2 { font-size: clamp(1.5rem, 4vw, 2.4rem); line-height: 1.02; letter-spacing: -
 @media (max-width: 640px) and (orientation: portrait) {
     .result.wrong { align-self: end; margin-bottom: 10px; }
 }
+
+#fullscreen[hidden] { display: none; }
+#fullscreen { width: 44px; height: 44px; padding: 0; align-items: center; justify-content: center; }
+#fullscreen .collapse, :fullscreen #fullscreen .expand { display: none; }
+:fullscreen #fullscreen .collapse { display: inline; }
+#fullscreen:not([hidden]) {
+    display: flex;
+    right: max(12px, env(safe-area-inset-right));
+    top: calc(max(12px, env(safe-area-inset-top)) + 50px);
+}
+#game.hosted #fullscreen:not([hidden]) { display: none; }

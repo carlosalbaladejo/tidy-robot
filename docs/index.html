@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#293e3a">
   <link rel="icon" href="./cover.jpg">
   <link rel="tv-game-manifest" href="./game.json">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=fullscreen-1">
   <title>Tidy Robot</title>
 </head>
 <body>
@@ -23,6 +23,12 @@
     <button id="sound" class="small-button" aria-label="Activar sonido" hidden>♪</button>
     <button id="settings" class="small-button" aria-label="Select: Contrarreloj" hidden>⚙</button>
     <section id="panel" aria-live="polite"></section>
+    <button class="small-button" id="fullscreen" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path class="expand" d="M9 9 4 4m0 4V4h4m7 5 5-5m-4 0h4v4m-5 7 5 5m0-4v4h-4m-7-5-5 5m4 0H4v-4"/>
+            <path class="collapse" d="m4 4 5 5M5 9h4V5m11-1-5 5m0-4v4h4m1 11-5-5m4 0h-4v4m-11 1 5-5m0 4v-4H5"/>
+        </svg>
+    </button>
     <div id="touch" hidden>
       <div class="pad">
         <button data-action="forward" aria-label="Avanzar">▲</button>
@@ -37,5 +43,6 @@
     </div>
   </main>
   <script type="module" src="./game.js"></script>
+<script type="module" src="./fullscreen.js"></script>
 </body>
 </html>
