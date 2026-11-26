@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#293e3a">
+  <link rel="icon" href="./cover.jpg">
+  <link rel="tv-game-manifest" href="./game.json">
+  <link rel="stylesheet" href="./style.css">
+  <title>Tidy Robot</title>
+</head>
+<body>
+  <main id="game" aria-label="Tidy Robot">
+    <canvas id="world" aria-label="Habitación del robot"></canvas>
+    <header id="hud" hidden>
+      <span id="room-name" class="pill"></span>
+      <span id="progress" class="pill" aria-label="Objetos guardados"></span>
+      <span id="clock" class="pill" hidden></span>
+    </header>
+    <div id="target" hidden><b id="target-button"></b><span id="target-icon"></span></div>
+    <div id="carrying" class="pill" hidden></div>
+    <div id="notice" role="status"></div>
+    <button id="sound" class="small-button" aria-label="Activar sonido" hidden>♪</button>
+    <button id="settings" class="small-button" aria-label="Select: Contrarreloj" hidden>⚙</button>
+    <section id="panel" aria-live="polite"></section>
+    <div id="touch" hidden>
+      <div class="pad">
+        <button data-action="forward" aria-label="Avanzar">▲</button>
+        <button data-action="left" aria-label="Girar a la izquierda">◀</button>
+        <button data-action="back" aria-label="Retroceder">▼</button>
+        <button data-action="right" aria-label="Girar a la derecha">▶</button>
+      </div>
+      <div class="face">
+        <button data-action="drop" aria-label="Soltar">□</button>
+        <button data-action="pick" aria-label="Coger">×</button>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="./game.js"></script>
+</body>
+</html>

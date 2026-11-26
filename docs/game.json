@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "title": "Tidy Robot",
+  "cover": "./cover.jpg",
+  "actions": [
+    {"id":"forward","label":"Avanzar","default":"dpad_up"},
+    {"id":"back","label":"Retroceder","default":"dpad_down"},
+    {"id":"left","label":"Girar a la izquierda","default":"dpad_left"},
+    {"id":"right","label":"Girar a la derecha","default":"dpad_right"},
+    {"id":"pick","label":"Coger / confirmar","default":"south"},
+    {"id":"drop","label":"Soltar / volver","default":"west"},
+    {"id":"menu","label":"Contrarreloj","default":"select"},
+    {"id":"pause","label":"Pausa","default":"start"}
+  ]
+}
