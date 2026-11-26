@@ -4,6 +4,8 @@ import { createScene } from './scene.js';
 import { drawMother } from './portrait.js';
 import { makeSound } from './sound.js';
 
+import { t, languageOption, toggleLanguage, localizedHTML } from './locale.js';
+
 const byId = id => document.getElementById(id);
 const ui = Object.fromEntries(['game', 'world', 'hud', 'room-name', 'progress', 'clock', 'target', 'target-button',
     'target-icon', 'carrying', 'notice', 'sound', 'settings', 'panel', 'touch'].map(id => [id, byId(id)]));
@@ -95,7 +97,7 @@ function showRooms() {
     select(roomIndex);
 }
 function showNotice(message, seconds = 1.35) {
-    ui.notice.textContent = message;
+    ui.notice.textContent = t(message);
     noticeUntil = animation.time + seconds;
 }
 function renderPanel() {
@@ -104,10 +106,11 @@ function renderPanel() {
         markup = `<div class="card start"><h1>Tidy Robot</h1>
             <p>¡Cada juguete a su sitio!</p>
             <div class="rooms">${rooms.map((room, i) => `<button data-choice="room:${i}"><span>${room.icon}</span>${room.name}</button>`).join('')}</div>
-            <p class="hints">Cruceta · <kbd>×</kbd> Coger · <kbd>□</kbd> Soltar · Select: reloj</p></div>`;
+            <p class="hints">Cruceta · <kbd>×</kbd> Coger · <kbd>□</kbd> Soltar · Select: menú</p></div>`;
     } else if (mode === 'settings') {
-        markup = `<div class="card"><h2>⌛ Contrarreloj</h2>
-            <div class="action-list"><button data-choice="timed">Contrarreloj: ${timed ? 'Sí' : 'No'}</button>
+        markup = `<div class="card"><h2>Configuración</h2>
+            <div class="action-list"><button data-choice="timed">${t('Contrarreloj:')} ${timed ? t('Sí') : 'No'}</button>
+            <button data-choice="language">${languageOption()}</button>
             <button data-choice="close">Volver</button></div></div>`;
     } else if (mode === 'pause') {
         markup = `<div class="card"><h2>Pausa</h2><div class="action-list">
@@ -119,7 +122,7 @@ function renderPanel() {
         const final = roomIndex === rooms.length - 1;
         const title = wrong ? '¡Eso va en otro sitio!' : happy ? '¡Todo en su sitio!' : '¡Se acabó el tiempo!';
         const icon = wrong ? symbols[outcome.item.kind][0] : '⌛';
-        const text = wrong ? `${icon} Mira dónde quedó y cámbialo de sitio.`
+        const text = wrong ? `${icon} ${t('Mira dónde quedó y cámbialo de sitio.')}`
             : happy ? '¡Mamá está contenta!' : 'Todo bien guardado, pero un poquito tarde.';
         const primary = wrong ? 'Arreglar' : final ? 'Habitaciones' : 'Siguiente';
         markup = `<div class="card result ${outcome.type}">
@@ -128,7 +131,7 @@ function renderPanel() {
             <div class="action-list"><button data-choice="${wrong ? 'fix' : final ? 'rooms' : 'next'}"><kbd>×</kbd> ${primary}</button>
             ${wrong ? '' : '<button data-choice="retry"><kbd>□</kbd> Repetir</button>'}</div></div></div>`;
     }
-    ui.panel.innerHTML = markup;
+    ui.panel.innerHTML = localizedHTML(markup);
     const portrait = byId('mother');
     if (portrait) drawMother(portrait, outcome.type);
     if (markup) select(selected);
@@ -146,7 +149,12 @@ function choose(choice) {
     else if (choice === 'rooms') showRooms();
     else if (choice === 'retry') start(roomIndex);
     else if (choice === 'next') start(roomIndex + 1);
-    else if (choice === 'timed') {
+    else if (choice === 'language') {
+        const focus = ui.panel.contains(document.activeElement);
+        toggleLanguage();
+        renderPanel();
+        if (focus) ui.panel.querySelector('[data-choice="language"]').focus();
+    } else if (choice === 'timed') {
         timed = !timed;
         try { localStorage.setItem('robot-errands.timed', timed ? 'yes' : 'no'); } catch {}
         playCue('confirm');
@@ -252,6 +260,7 @@ window.addEventListener('message', ({ data, source }) => {
 window.addEventListener('keydown', event => {
     const action = keymap.get(event.code);
     if (!action || event.altKey || event.metaKey || event.ctrlKey) return;
+    if (event.target?.localName === 'button' && ['Enter', ' '].includes(event.key)) return;
     event.preventDefault();
     if (event.repeat || host !== null) return;
     unlockSound();
@@ -308,7 +317,7 @@ function show(element, visible) {
 function renderHud() {
     const layout = rooms[roomIndex];
     const stored = round.items.filter(item => item.state === 'stored').length;
-    const name = `${layout.icon} ${layout.name}`;
+    const name = `${layout.icon} ${t(layout.name)}`;
     const counter = `${stored}/${round.items.length}`;
     if (ui['room-name'].textContent !== name) ui['room-name'].textContent = name;
     if (ui.progress.textContent !== counter) ui.progress.textContent = counter;
@@ -394,5 +403,5 @@ try {
     requestAnimationFrame(frame);
 } catch (error) {
     console.error(error);
-    ui.panel.innerHTML = '<div class="card"><h1>Tidy Robot</h1><p>Esta pantalla no ha podido iniciar los gráficos 3D. Prueba a abrir el juego en Link Arcade o en otro navegador.</p></div>';
+    ui.panel.innerHTML = localizedHTML('<div class="card"><h1>Tidy Robot</h1><p>Esta pantalla no ha podido iniciar los gráficos 3D. Prueba a abrir el juego en Link Arcade o en otro navegador.</p></div>');
 }
